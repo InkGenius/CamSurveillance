@@ -10,23 +10,29 @@ using System.Windows.Forms;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Diagnostics;
+using System.Reflection;
+using System.IO;
 
 namespace CamSurveillance
 {
     public partial class MainForm : Form
     {
         private Stopwatch stopWatch = null;
-        private enum LINKTYPE { JPEG, MJPEG };
+        private enum LINKTYPE { JPEG, MJPEG, RTPS };
         private LINKTYPE currentChoice = LINKTYPE.JPEG;
 
         public MainForm()
         {
             InitializeComponent();
             this.panelUrl.Visible = false;
+            this.flowLayoutPanelVlc.Visible = false;
+            this.flowLayoutPanelNormal.Visible = true;
         }
 
         private void 本地摄像头ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.flowLayoutPanelVlc.Visible = false;
+            this.flowLayoutPanelNormal.Visible = true;
             VideoCaptureDeviceForm form = new VideoCaptureDeviceForm();
 
             if (form.ShowDialog(this) == DialogResult.OK)
@@ -41,6 +47,8 @@ namespace CamSurveillance
 
         private void jPEGURLToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.flowLayoutPanelVlc.Visible = false;
+            this.flowLayoutPanelNormal.Visible = true;
             this.panelUrl.Visible = true;
             this.labelTip.Text = "请输入JEPG URL";
             this.comboBoxUrls.Text = "";
@@ -56,6 +64,8 @@ namespace CamSurveillance
 
         private void mJPEGURLToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.flowLayoutPanelVlc.Visible = false;
+            this.flowLayoutPanelNormal.Visible = true;
             this.panelUrl.Visible = true;
             this.labelTip.Text = "请输入MJEPG URL";
             this.comboBoxUrls.Text = "";
@@ -63,6 +73,22 @@ namespace CamSurveillance
             string[] URLs = new string[]
             {
                 "http://towercam.uu.edu/axis-cgi/mjpg/video.cgi"
+            };
+            comboBoxUrls.Items.Clear();
+            comboBoxUrls.Items.AddRange(URLs);
+        }
+
+        private void rTPSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.flowLayoutPanelVlc.Visible = true;
+            this.flowLayoutPanelNormal.Visible = false;
+            this.panelUrl.Visible = true;
+            this.labelTip.Text = "请输入REPS URL";
+            this.comboBoxUrls.Text = "";
+            currentChoice = LINKTYPE.RTPS;
+            string[] URLs = new string[]
+            {
+                "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov"
             };
             comboBoxUrls.Items.Clear();
             comboBoxUrls.Items.AddRange(URLs);
@@ -142,6 +168,11 @@ namespace CamSurveillance
                     OpenVideoSource(mjpegSource);
                     break;
                 }
+                case LINKTYPE.RTPS:
+                {
+                    vlcControl.Play(new Uri(url.Trim()));
+                    break;
+                }
             }
         }
 
@@ -186,6 +217,30 @@ namespace CamSurveillance
 
                     stopWatch.Reset();
                     stopWatch.Start();
+                }
+            }
+        }
+
+        private void vlcControl_VlcLibDirectoryNeeded(object sender, Vlc.DotNet.Forms.VlcLibDirectoryNeededEventArgs e)
+        {
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            if (currentDirectory == null)
+                return;
+            if (IntPtr.Size == 4)
+                e.VlcLibDirectory = new DirectoryInfo(Path.Combine(currentDirectory, @"..\..\lib\x86\"));
+            else
+                e.VlcLibDirectory = new DirectoryInfo(Path.Combine(currentDirectory, @"..\..\lib\x64\"));
+
+            if (!e.VlcLibDirectory.Exists)
+            {
+                var folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+                folderBrowserDialog.Description = "Select Vlc libraries folder.";
+                folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
+                folderBrowserDialog.ShowNewFolderButton = true;
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
+                    e.VlcLibDirectory = new DirectoryInfo(folderBrowserDialog.SelectedPath);
                 }
             }
         }

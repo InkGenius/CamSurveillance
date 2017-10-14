@@ -35,6 +35,7 @@
             this.打开JPEGURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jPEGURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mJPEGURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rTPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer = new System.Windows.Forms.Timer(this.components);
@@ -43,16 +44,24 @@
             this.btnLink = new System.Windows.Forms.Button();
             this.comboBoxUrls = new System.Windows.Forms.ComboBox();
             this.labelTip = new System.Windows.Forms.Label();
+            this.flowLayoutPanelVlc = new System.Windows.Forms.FlowLayoutPanel();
+            this.vlcControl = new Vlc.DotNet.Forms.VlcControl();
+            this.flowLayoutPanelNormal = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.panelUrl.SuspendLayout();
+            this.flowLayoutPanelVlc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vlcControl)).BeginInit();
+            this.flowLayoutPanelNormal.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // videoSourcePlayer
             // 
-            this.videoSourcePlayer.Location = new System.Drawing.Point(0, 71);
+            this.videoSourcePlayer.Location = new System.Drawing.Point(3, 3);
             this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(657, 343);
+            this.videoSourcePlayer.Size = new System.Drawing.Size(623, 343);
             this.videoSourcePlayer.TabIndex = 0;
             this.videoSourcePlayer.Text = "videoSourcePlayer";
             this.videoSourcePlayer.VideoSource = null;
@@ -65,7 +74,7 @@
             this.打开JPEGURLToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(657, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(668, 25);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -80,7 +89,8 @@
             // 
             this.打开JPEGURLToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.jPEGURLToolStripMenuItem,
-            this.mJPEGURLToolStripMenuItem});
+            this.mJPEGURLToolStripMenuItem,
+            this.rTPSToolStripMenuItem});
             this.打开JPEGURLToolStripMenuItem.Name = "打开JPEGURLToolStripMenuItem";
             this.打开JPEGURLToolStripMenuItem.Size = new System.Drawing.Size(80, 21);
             this.打开JPEGURLToolStripMenuItem.Text = "远程摄像头";
@@ -99,13 +109,20 @@
             this.mJPEGURLToolStripMenuItem.Text = "MJPEG URL";
             this.mJPEGURLToolStripMenuItem.Click += new System.EventHandler(this.mJPEGURLToolStripMenuItem_Click);
             // 
+            // rTPSToolStripMenuItem
+            // 
+            this.rTPSToolStripMenuItem.Name = "rTPSToolStripMenuItem";
+            this.rTPSToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+            this.rTPSToolStripMenuItem.Text = "RTPS URL";
+            this.rTPSToolStripMenuItem.Click += new System.EventHandler(this.rTPSToolStripMenuItem_Click);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 417);
+            this.statusStrip.Location = new System.Drawing.Point(0, 791);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(657, 22);
+            this.statusStrip.Size = new System.Drawing.Size(668, 22);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -159,14 +176,56 @@
             this.labelTip.TabIndex = 0;
             this.labelTip.Text = "labelTip";
             // 
+            // flowLayoutPanelVlc
+            // 
+            this.flowLayoutPanelVlc.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanelVlc.Controls.Add(this.vlcControl);
+            this.flowLayoutPanelVlc.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanelVlc.Location = new System.Drawing.Point(9, 361);
+            this.flowLayoutPanelVlc.Name = "flowLayoutPanelVlc";
+            this.flowLayoutPanelVlc.Size = new System.Drawing.Size(642, 353);
+            this.flowLayoutPanelVlc.TabIndex = 4;
+            // 
+            // vlcControl
+            // 
+            this.vlcControl.BackColor = System.Drawing.Color.Black;
+            this.vlcControl.Location = new System.Drawing.Point(3, 3);
+            this.vlcControl.Name = "vlcControl";
+            this.vlcControl.Size = new System.Drawing.Size(588, 304);
+            this.vlcControl.Spu = -1;
+            this.vlcControl.TabIndex = 0;
+            this.vlcControl.Text = "vlcControl1";
+            this.vlcControl.VlcLibDirectory = null;
+            this.vlcControl.VlcMediaplayerOptions = null;
+            this.vlcControl.VlcLibDirectoryNeeded += new System.EventHandler<Vlc.DotNet.Forms.VlcLibDirectoryNeededEventArgs>(this.vlcControl_VlcLibDirectoryNeeded);
+            // 
+            // flowLayoutPanelNormal
+            // 
+            this.flowLayoutPanelNormal.Controls.Add(this.videoSourcePlayer);
+            this.flowLayoutPanelNormal.Location = new System.Drawing.Point(9, 3);
+            this.flowLayoutPanelNormal.Name = "flowLayoutPanelNormal";
+            this.flowLayoutPanelNormal.Size = new System.Drawing.Size(642, 352);
+            this.flowLayoutPanelNormal.TabIndex = 6;
+            // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.flowLayoutPanelNormal);
+            this.panel1.Controls.Add(this.flowLayoutPanelVlc);
+            this.panel1.Location = new System.Drawing.Point(3, 71);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(654, 717);
+            this.panel1.TabIndex = 7;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(657, 439);
+            this.ClientSize = new System.Drawing.Size(668, 813);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelUrl);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.videoSourcePlayer);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -178,6 +237,10 @@
             this.statusStrip.PerformLayout();
             this.panelUrl.ResumeLayout(false);
             this.panelUrl.PerformLayout();
+            this.flowLayoutPanelVlc.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.vlcControl)).EndInit();
+            this.flowLayoutPanelNormal.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -199,6 +262,11 @@
         private System.Windows.Forms.Button btnLink;
         private System.Windows.Forms.ComboBox comboBoxUrls;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelVlc;
+        private Vlc.DotNet.Forms.VlcControl vlcControl;
+        private System.Windows.Forms.ToolStripMenuItem rTPSToolStripMenuItem;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelNormal;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
